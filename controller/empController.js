@@ -1,67 +1,57 @@
-let empSchema=require("../Model/EmpSchema.js")
+let EmpSchema=require("../Model/EmpSchema")
 
 
-const empCreate=async(req,res)=>{
-
+let createEmpController=async(req,res)=>{
 try{
+    let newPerson= new EmpSchema({
+        fName:req.body.fName,
+        LName:req.body.LName,
+        email:req.body.email,
+        password:req.body.password,  fName:req.body.fName,
+        phone:req.body.phone,
     
- let newData=new empSchema({
-    name:req.body.name,
-    password:req.body.password,
-    email:req.body.email
- })
-
-let data=await newData.save()
-res.json({
-    data_saved:data
-})
-
-}
-catch(err)
-{
-    res.json({Error_is :err})
-}
-}
-
-
-let showEmp=async(req,res)=>{
-
-    try{
-        let all=await empSchema.find({})
-        res.json({detials:all})
-    }
-    catch(err)
-    {
-        res.json({pramod_err:err})
-    }
-
-}
-let empDelete=async(req,res)=>{
-try{
-    let email=req.body.email
-
-    let reply=    await empSchema.findOneAndDelete({email:req.body.email})
-    res.json({msg:"delted Successfully"})
+    })
+    let val=await newPerson.save()
+    res.json({empData:val})
 }
 catch(err){
 
 }
 }
 
-let empUpdate=async(req,res)=>{try{
+
+let getEmpController=async(req,res)=>{
+try{
+
+let fetched=await EmpSchema.find({})
+res.json({allEmp:fetched})
+
+
+}   
+catch(err){
+res.json({ERROR:{err}})
+} 
+}
+let editEmpController=async(req,res)=>{
     
-   let data= await empSchema.findOneAndUpdate({email:req.body.email},{
-        name:req.body.name,
-        password:req.body.password,
-        email:req.body.email
-     },  { new: true })
-     res.json({updatedTo:data})
+    try{
+let edit=await EmpSchema.findOneAndUpdate({email:req.body.email},{$set:req.body},{new:true}) 
+res.json({edited:true,data:edit})    
 }
-catch(err)
-{
-res.json({erroe:err})
+    catch(err){
+
+        res.json({ERROR:{err}})
+    }
+}
+let deleteEmpController=async(req,res)=>{
+try{
+    await EmpSchema.findOneAndDelete({email:req.body.email})   
+    res.json({msg:"data deleted successfully"}) 
+}
+catch(err){
+    res.json({ERROR:{err}})
+}
 }
 
-}
 
-module.exports={empCreate,showEmp,empDelete,empUpdate}
+module.exports={ createEmpController ,getEmpController,editEmpController,deleteEmpController}

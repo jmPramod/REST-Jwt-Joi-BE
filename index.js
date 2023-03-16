@@ -1,35 +1,42 @@
 const express=require("express")
 const { default: mongoose } = require("mongoose")
+const { createEmpController ,getEmpController,editEmpController,deleteEmpController} = require("./controller/empController")
 const app=express()
 require("dotenv").config()
-const {empCreate,showEmp,empDelete,empUpdate}=require("./controller/empController")
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 
 app.get("/",(req,res)=>{
-    res.send("<h1>Welcome</h1>")
+res.send("<h1>Welcome to Node JS</h1>")
 })
 
 
+app.post("/emp",createEmpController)
 
-app.post("/emp",empCreate)
-app.get("/emp",showEmp)
-app.delete("/emp",empDelete)
-app.put("/emp",empUpdate)
 
-const ConnectDataBase=()=>{
+app.get("/emp",getEmpController)
+
+
+app.put("/emp",editEmpController)
+
+
+app.delete("/emp",deleteEmpController)
+
+
+
+const connectToDataBase=()=>{
     try{
-mongoose.set("strictQuery",true)
-mongoose.connect("mongodb+srv://pramod:vr7pboCbV6MyMVss@cluster0.3xonr81.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser:true,useUnifiedTopology:true})
-console.log("connected to Atlas Data base!!!");
+        mongoose.set("strictQuery",true)
+        mongoose.connect(process.env.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: true})
+console.log("connecte to Atlas DataBase!!!");
     }
     catch(err){
-        console.log("pramod_error",err);
+console.log(err);
     }
 }
-ConnectDataBase()
-
-app.listen(5000,()=>{
-    console.log("server connect to 5000");
+connectToDataBase()
+app.listen(4500,()=>{
+console.log("port running on 4500");
 })
