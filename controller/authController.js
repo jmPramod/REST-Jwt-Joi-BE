@@ -14,7 +14,7 @@ let register = async (req, res, next) => {
     description: 'Fetch chapter content of the given URL',
     schema: {
       
-      "userName":"ravi",
+      "name":"ravi",
     "email": "ravi@gmail.com",
     "password":"1234567890" 
     
@@ -49,7 +49,7 @@ const login = async (req, res, next) => {
     description: 'Fetch chapter content of the given URL',
     schema: {
       
-        "userName":"ravi",
+        "name":"ravi",
     "email": "ravi@gmail.com",
     "password":"1234567890" 
     

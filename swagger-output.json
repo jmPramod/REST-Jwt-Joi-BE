@@ -63,15 +63,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "data",
-            "in": "body",
-            "description": "Fetch chapter content of the given URL",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
           }
         ],
         "responses": {
@@ -100,7 +91,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userName": {
+                "name": {
                   "type": "string",
                   "example": "RAJ"
                 },
@@ -148,7 +139,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userName": {
+                "name": {
                   "type": "string",
                   "example": "RAJ kumar"
                 },
@@ -188,15 +179,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "data",
-            "in": "body",
-            "description": "Fetch chapter content of the given URL",
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
           }
         ],
         "responses": {
@@ -225,7 +207,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userName": {
+                "name": {
                   "type": "string",
                   "example": "ravi"
                 },
@@ -267,7 +249,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userName": {
+                "name": {
                   "type": "string",
                   "example": "ravi"
                 },

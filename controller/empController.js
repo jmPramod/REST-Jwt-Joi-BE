@@ -32,15 +32,7 @@ const singleUserController=async(req,res,next)=>{
   #swagger.security = [{
     "apiKeyAuth": []
   }]
-  #swagger.parameters['data']  = {
-    in: 'body',
-    description: 'Fetch chapter content of the given URL',
-    schema: {
-      
-    
-    
-    }
-  }
+  
   */
 
 
@@ -76,7 +68,7 @@ const createUserController=async(req,res,next)=>{
     description: 'Fetch chapter content of the given URL',
     schema: {
       
-      "userName":"RAJ",
+      "name":"RAJ",
     "email": "RAJ@gmail.com",
     "password":"1234567890" 
     
@@ -123,7 +115,7 @@ const updateUserController=async(req,res,next)=>{
     description: 'Fetch chapter content of the given URL',
     schema: {
       
-      "userName":"RAJ kumar",
+      "name":"RAJ kumar",
     "email": "RAJ@gmail.com",
     "password":"1234567890" 
     
@@ -135,9 +127,9 @@ const updateUserController=async(req,res,next)=>{
     // console.log(id);
 
     try{
-      const {error,value}=await schemaJoi.validate(req.body)
-      console.log("res123", {error,value});
-      error&&next(error);
+      // const {error,value}=await schemaJoi.validate(req.body)
+      // console.log("res123", {error,value});
+      // error&&next(error);
         const updateEmp= await EmpSchema.findOneAndUpdate({_id:id},{$set:{name:req.body.name, email:req.body.email,password:req.body.password}},  { new: true })
 
        updateEmp && res.status(200).json({status:"User Updated Success!!!",data:updateEmp})
@@ -161,15 +153,7 @@ const deleteUserController=async(req,res,next)=>{
   #swagger.security = [{
     "apiKeyAuth": []
   }]
-  #swagger.parameters['data']  = {
-    in: 'body',
-    description: 'Fetch chapter content of the given URL',
-    schema: {
-      
-     
-    
-    }
-  }
+  
   */
 
     let id=req.params.ID
