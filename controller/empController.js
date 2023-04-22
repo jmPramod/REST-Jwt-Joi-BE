@@ -1,57 +1,183 @@
-let EmpSchema=require("../Model/EmpSchema")
+const { default: mongoose } = require("mongoose");
+const EmpSchema=require("../Model/EmpSchema")
 
 
-let createEmpController=async(req,res)=>{
-try{
-    let newPerson= new EmpSchema({
-        fName:req.body.fName,
-        LName:req.body.LName,
-        email:req.body.email,
-        password:req.body.password,  fName:req.body.fName,
-        phone:req.body.phone,
-    
-    })
-    let val=await newPerson.save()
-    res.json({empData:val})
-}
-catch(err){
+let getAllUserController=async (req,res,next)=>{
+      /*  
+  #swagger.tags = ['User']
+  #swagger.security = [{
+    "apiKeyAuth": []
+  }]
+ 
+  }
+  */
 
-}
-}
-
-
-let getEmpController=async(req,res)=>{
-try{
-
-let fetched=await EmpSchema.find({})
-res.json({allEmp:fetched})
-
-
-}   
-catch(err){
-res.json({ERROR:{err}})
-} 
-}
-let editEmpController=async(req,res)=>{
-    
     try{
-let edit=await EmpSchema.findOneAndUpdate({email:req.body.email},{$set:req.body},{new:true}) 
-res.json({edited:true,data:edit})    
-}
-    catch(err){
+        let allUser=await EmpSchema.find({})
+        
+        res.status(200).json({Data:allUser})
 
-        res.json({ERROR:{err}})
+    }
+    catch(err){
+        console.log("Error Msg: ",err);
+        next(err);
+
     }
 }
-let deleteEmpController=async(req,res)=>{
-try{
-    await EmpSchema.findOneAndDelete({email:req.body.email})   
-    res.json({msg:"data deleted successfully"}) 
-}
-catch(err){
-    res.json({ERROR:{err}})
-}
-}
+
+const singleUserController=async(req,res,next)=>{
+  /*  
+  #swagger.tags = ['User']
+  #swagger.security = [{
+    "apiKeyAuth": []
+  }]
+  #swagger.parameters['data']  = {
+    in: 'body',
+    description: 'Fetch chapter content of the given URL',
+    schema: {
+      
+    
+    
+    }
+  }
+  */
 
 
-module.exports={ createEmpController ,getEmpController,editEmpController,deleteEmpController}
+
+    try{
+        let id=req.params.ID
+        // console.log(id);
+        let singleUser=await EmpSchema.findOne({_id:id})
+      
+        singleUser&&res.status(200).json({status:" Single User Fetched Success!!!",data:singleUser})
+        
+        
+        !singleUser&&res.status(200).json({status:" User does not exist!!!"})
+
+
+    }
+    catch(err){
+        console.log("Error Msg: ",err);
+        next(err);
+
+    }
+}
+
+const createUserController=async(req,res,next)=>{
+
+  /*  
+  #swagger.tags = ['User']
+  #swagger.security = [{
+    "apiKeyAuth": []
+  }]
+  #swagger.parameters['data']  = {
+    in: 'body',
+    description: 'Fetch chapter content of the given URL',
+    schema: {
+      
+      "userName":"RAJ",
+    "email": "RAJ@gmail.com",
+    "password":"1234567890" 
+    
+    }
+  }
+  */
+
+
+    try{
+        const newEmp=new EmpSchema({
+            name:req.body.name,
+            email:req.body.email,
+            password:req.body.password
+    
+        })
+        newEmp.save()
+        res.status(200).json({status:"User Created Success!!!",data:newEmp})
+
+    }
+    catch(err){
+        
+        // res.status(500).json({status:"User was not Created",ErrorMsg:err})
+        console.log("Error Msg: ",err);
+        next(err);
+
+    }
+}
+
+const updateUserController=async(req,res,next)=>{
+  /*  
+  #swagger.tags = ['User']
+  #swagger.security = [{
+    "apiKeyAuth": []
+  }]
+  #swagger.parameters['data']  = {
+    in: 'body',
+    description: 'Fetch chapter content of the given URL',
+    schema: {
+      
+      "userName":"RAJ kumar",
+    "email": "RAJ@gmail.com",
+    "password":"1234567890" 
+    
+    }
+  }
+  */
+
+    let id=req.params.ID
+    // console.log(id);
+
+    try{
+        const updateEmp= await EmpSchema.findOneAndUpdate({_id:id},{$set:{name:req.body.name, email:req.body.email,password:req.body.password}},  { new: true })
+
+       updateEmp && res.status(200).json({status:"User Updated Success!!!",data:updateEmp})
+
+       
+      ! updateEmp && res.status(200).json({status:"User does not exist and Cant be Updated!!!"})
+
+    }
+    catch(err){
+        
+        // res.status(500).json({status:"User was not Updated",ErrorMsg:err})
+        console.log("Error Msg: ",err);
+        next(err);
+
+    }
+}
+
+const deleteUserController=async(req,res,next)=>{
+  /*  
+  #swagger.tags = ['User']
+  #swagger.security = [{
+    "apiKeyAuth": []
+  }]
+  #swagger.parameters['data']  = {
+    in: 'body',
+    description: 'Fetch chapter content of the given URL',
+    schema: {
+      
+     
+    
+    }
+  }
+  */
+
+    let id=req.params.ID
+    // console.log(id);
+
+    try{
+        const deletedEmp= await EmpSchema.findOneAndDelete({_id:id})
+
+        deletedEmp&&   res.status(200).json({status:"User Deleted Success!!!",data:deletedEmp})
+
+        !deletedEmp&&   res.status(200).json({status:"User cant be Deleted , as it does not exist!!!"})
+
+    }
+    catch(err){
+        
+        // res.status(500).json({status:"User was not Deleted",ErrorMsg:err})
+        console.log("Error Msg: ",err);
+        next(err);
+
+    }
+}
+module.exports ={getAllUserController,singleUserController,createUserController,updateUserController,deleteUserController}

@@ -1,17 +1,9 @@
-let mongoose=require("mongoose")
+const mongoose=require("mongoose")
 
-let empModel=new mongoose.Schema({
-    fName:{type:String,require:true},
-    
-    lName:{type:String,require:true},
-    
-    email:{type:String,require:true,unique:true},
-    
-    password:{type:String,require:true},
-    
-    phone:{type:String}
-
-
+let EmpModel=mongoose.Schema({
+    name:{type:String},
+    email:{type:String},
+    password:{type:String},
 })
 
-module.exports=mongoose.model("emp1",empModel)
+module.exports=mongoose.model("EmpModel",EmpModel)

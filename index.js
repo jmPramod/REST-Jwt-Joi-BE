@@ -1,42 +1,69 @@
-const express=require("express")
-const { default: mongoose } = require("mongoose")
-const { createEmpController ,getEmpController,editEmpController,deleteEmpController} = require("./controller/empController")
-const app=express()
+const express=require('express')
+const { default: mongoose } = require('mongoose')
+const { routes } = require('./router/routeGET')
+
+var cookies = require("cookie-parser");
+const app = express()
+
 require("dotenv").config()
 
+
+/* -------------------------------------------------------------------------- */
+/*                                   swagger                                  */
+/* -------------------------------------------------------------------------- */
+
+const swaggerUi=require("swagger-ui-express")
+
+const swaggerFile = require("./swagger-output.json");
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 middlewear                                 */
+/* -------------------------------------------------------------------------- */
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended:true}))
+app.use(cookies());
+
+/* -------------------------------------------------------------------------- */
+/*                                   Routes                                   */
+/* -------------------------------------------------------------------------- */
 
 
-app.get("/",(req,res)=>{
-res.send("<h1>Welcome to Node JS</h1>")
-})
-
-
-app.post("/emp",createEmpController)
-
-
-app.get("/emp",getEmpController)
-
-
-app.put("/emp",editEmpController)
-
-
-app.delete("/emp",deleteEmpController)
+app.use("/",routes)
 
 
 
-const connectToDataBase=()=>{
-    try{
-        mongoose.set("strictQuery",true)
-        mongoose.connect(process.env.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: true})
-console.log("connecte to Atlas DataBase!!!");
-    }
-    catch(err){
-console.log(err);
-    }
+/* -------------------------------------------------------------------------- */
+/*                                ErrorHandler                                */
+/* -------------------------------------------------------------------------- */
+
+app.use((err,req,res,next)=>{
+   
+    const errorStatus=err.status||500
+  const errorMsg=err.message||"something went Wrong!!!!"
+    return res.status(500).json({
+      Success:false,
+      status :errorStatus,
+      message :errorMsg,
+    
+    })
+  })
+
+/* -------------------------------------------------------------------------- */
+/*                            Data base Connection                            */
+/* -------------------------------------------------------------------------- */
+const mongoDbConnect=async()=>{
+
+
+    mongoose.connect(process.env.MONGO_URL,{useNewUrlParser: true, useUnifiedTopology: true})
+    console.log(`Mongo Atlas DataBase Connected!!!`);
 }
-connectToDataBase()
-app.listen(4500,()=>{
-console.log("port running on 4500");
+mongoDbConnect()
+
+app.listen(process.env.PORT,()=>{
+    console.log(`Server running on port http://localhost:${process.env.PORT}`);
 })

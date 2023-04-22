@@ -1,0 +1,304 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Crud Api",
+    "description": "User CRUD with JWT authentication"
+  },
+  "host": "localhost:5800",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Endpoints"
+    },
+    {
+      "name": "Login/Register",
+      "description": "Endpoints"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "any description..."
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/GET/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/GET/users/{ID}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Fetch chapter content of the given URL",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/POST/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Fetch chapter content of the given URL",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "RAJ"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "RAJ@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "1234567890"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/PUT/users/{ID}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Fetch chapter content of the given URL",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "RAJ kumar"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "RAJ@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "1234567890"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/DELETE/users/{ID}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Fetch chapter content of the given URL",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Login/Register"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Fetch chapter content of the given URL",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "ravi"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "ravi@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "1234567890"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Login/Register"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Fetch chapter content of the given URL",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "ravi"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "ravi@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "1234567890"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "AuthToken": []
+    }
+  ]
+}
