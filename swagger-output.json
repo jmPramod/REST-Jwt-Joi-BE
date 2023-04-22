@@ -211,7 +211,7 @@
         ]
       }
     },
-    "/auth/register": {
+    "/auth/login": {
       "post": {
         "tags": [
           "Login/Register"
@@ -253,7 +253,7 @@
         ]
       }
     },
-    "/auth/login": {
+    "/auth/register": {
       "post": {
         "tags": [
           "Login/Register"
