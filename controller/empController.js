@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const EmpSchema=require("../Model/EmpSchema")
 
+const { schemaJoi } = require("../Model/joiValidaition");
 
 let getAllUserController=async (req,res,next)=>{
       /*  
@@ -14,7 +15,7 @@ let getAllUserController=async (req,res,next)=>{
 
     try{
         let allUser=await EmpSchema.find({})
-        
+    
         res.status(200).json({Data:allUser})
 
     }
@@ -89,7 +90,9 @@ const createUserController=async(req,res,next)=>{
 
       const data = req.body;
 
- 
+      const {error,value}=await schemaJoi.validate(req.body)
+      console.log("res123", {error,value});
+      error&&next(error);
         const newEmp=new EmpSchema({
             name:req.body.name,
             email:req.body.email,
@@ -132,6 +135,9 @@ const updateUserController=async(req,res,next)=>{
     // console.log(id);
 
     try{
+      const {error,value}=await schemaJoi.validate(req.body)
+      console.log("res123", {error,value});
+      error&&next(error);
         const updateEmp= await EmpSchema.findOneAndUpdate({_id:id},{$set:{name:req.body.name, email:req.body.email,password:req.body.password}},  { new: true })
 
        updateEmp && res.status(200).json({status:"User Updated Success!!!",data:updateEmp})
