@@ -85,13 +85,18 @@ const createUserController=async(req,res,next)=>{
 
 
     try{
+
+
+      const data = req.body;
+
+ 
         const newEmp=new EmpSchema({
             name:req.body.name,
             email:req.body.email,
             password:req.body.password
     
         })
-        newEmp.save()
+       await  newEmp.save()
         res.status(200).json({status:"User Created Success!!!",data:newEmp})
 
     }
