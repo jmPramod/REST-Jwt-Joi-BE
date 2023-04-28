@@ -25,8 +25,8 @@ const corsOprion={
   optionSuccessStatus:200
 
 }
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(cors(corsOprion))
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookies());
