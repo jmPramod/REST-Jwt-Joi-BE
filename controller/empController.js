@@ -1,10 +1,10 @@
 const { default: mongoose } = require("mongoose");
-const EmpSchema=require("../Model/EmpSchema")
+const EmpSchema = require("../Model/EmpSchema");
 
 const { schemaJoi } = require("../Model/joiValidaition");
 
-let getAllUserController=async (req,res,next)=>{
-      /*  
+let getAllUserController = async (req, res, next) => {
+  /*  
   #swagger.tags = ['User']
   #swagger.security = [{
     "apiKeyAuth": []
@@ -13,20 +13,17 @@ let getAllUserController=async (req,res,next)=>{
   }
   */
 
-    try{
-        let allUser=await EmpSchema.find({})
-    
-        res.status(200).json({Data:allUser})
+  try {
+    let allUser = await EmpSchema.find({});
 
-    }
-    catch(err){
-        console.log("Error Msg: ",err);
-        next(err);
+    res.status(200).json({ Data: allUser });
+  } catch (err) {
+    console.log("Error Msg: ", err);
+    next(err);
+  }
+};
 
-    }
-}
-
-const singleUserController=async(req,res,next)=>{
+const singleUserController = async (req, res, next) => {
   /*  
   #swagger.tags = ['User']
   #swagger.security = [{
@@ -35,29 +32,24 @@ const singleUserController=async(req,res,next)=>{
   
   */
 
+  try {
+    let id = req.params.ID;
+    // console.log(id);
+    let singleUser = await EmpSchema.findOne({ _id: id });
 
+    singleUser &&
+      res
+        .status(200)
+        .json({ status: " Single User Fetched Success!!!", data: singleUser });
 
-    try{
-        let id=req.params.ID
-        // console.log(id);
-        let singleUser=await EmpSchema.findOne({_id:id})
-      
-        singleUser&&res.status(200).json({status:" Single User Fetched Success!!!",data:singleUser})
-        
-        
-        !singleUser&&res.status(200).json({status:" User does not exist!!!"})
+    !singleUser && res.status(200).json({ status: " User does not exist!!!" });
+  } catch (err) {
+    console.log("Error Msg: ", err);
+    next(err);
+  }
+};
 
-
-    }
-    catch(err){
-        console.log("Error Msg: ",err);
-        next(err);
-
-    }
-}
-
-const createUserController=async(req,res,next)=>{
-
+const createUserController = async (req, res, next) => {
   /*  
   #swagger.tags = ['User']
   #swagger.security = [{
@@ -76,35 +68,27 @@ const createUserController=async(req,res,next)=>{
   }
   */
 
+  try {
+    const data = req.body;
 
-    try{
+    const { error, value } = await schemaJoi.validate(req.body);
+    console.log("res123", { error, value });
+    error && next(error);
+    const newEmp = new EmpSchema({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+    });
+    await newEmp.save();
+    res.status(200).json({ status: "User Created Success!!!", data: newEmp });
+  } catch (err) {
+    // res.status(500).json({status:"User was not Created",ErrorMsg:err})
+    console.log("Error Msg: ", err);
+    next(err);
+  }
+};
 
-
-      const data = req.body;
-
-      const {error,value}=await schemaJoi.validate(req.body)
-      console.log("res123", {error,value});
-      error&&next(error);
-        const newEmp=new EmpSchema({
-            name:req.body.name,
-            email:req.body.email,
-            password:req.body.password
-    
-        })
-       await  newEmp.save()
-        res.status(200).json({status:"User Created Success!!!",data:newEmp})
-
-    }
-    catch(err){
-        
-        // res.status(500).json({status:"User was not Created",ErrorMsg:err})
-        console.log("Error Msg: ",err);
-        next(err);
-
-    }
-}
-
-const updateUserController=async(req,res,next)=>{
+const updateUserController = async (req, res, next) => {
   /*  
   #swagger.tags = ['User']
   #swagger.security = [{
@@ -123,31 +107,42 @@ const updateUserController=async(req,res,next)=>{
   }
   */
 
-    let id=req.params.ID
-    // console.log(id);
+  let id = req.params.ID;
+  // console.log(id);
 
-    try{
-      // const {error,value}=await schemaJoi.validate(req.body)
-      // console.log("res123", {error,value});
-      // error&&next(error);
-        const updateEmp= await EmpSchema.findOneAndUpdate({_id:id},{$set:{name:req.body.name, email:req.body.email,password:req.body.password}},  { new: true })
+  try {
+    // const {error,value}=await schemaJoi.validate(req.body)
+    // console.log("res123", {error,value});
+    // error&&next(error);
+    const updateEmp = await EmpSchema.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+        },
+      },
+      { new: true }
+    );
 
-       updateEmp && res.status(200).json({status:"User Updated Success!!!",data:updateEmp})
+    updateEmp &&
+      res
+        .status(200)
+        .json({ status: "User Updated Success!!!", data: updateEmp });
 
-       
-      ! updateEmp && res.status(200).json({status:"User does not exist and Cant be Updated!!!"})
+    !updateEmp &&
+      res
+        .status(200)
+        .json({ status: "User does not exist and Cant be Updated!!!" });
+  } catch (err) {
+    // res.status(500).json({status:"User was not Updated",ErrorMsg:err})
+    console.log("Error Msg: ", err);
+    next(err);
+  }
+};
 
-    }
-    catch(err){
-        
-        // res.status(500).json({status:"User was not Updated",ErrorMsg:err})
-        console.log("Error Msg: ",err);
-        next(err);
-
-    }
-}
-
-const deleteUserController=async(req,res,next)=>{
+const deleteUserController = async (req, res, next) => {
   /*  
   #swagger.tags = ['User']
   #swagger.security = [{
@@ -156,23 +151,31 @@ const deleteUserController=async(req,res,next)=>{
   
   */
 
-    let id=req.params.ID
-    // console.log(id);
+  let id = req.params.ID;
+  // console.log(id);
 
-    try{
-        const deletedEmp= await EmpSchema.findOneAndDelete({_id:id})
+  try {
+    const deletedEmp = await EmpSchema.findOneAndDelete({ _id: id });
 
-        deletedEmp&&   res.status(200).json({status:"User Deleted Success!!!",data:deletedEmp})
+    deletedEmp &&
+      res
+        .status(200)
+        .json({ status: "User Deleted Success!!!", data: deletedEmp });
 
-        !deletedEmp&&   res.status(200).json({status:"User cant be Deleted , as it does not exist!!!"})
-
-    }
-    catch(err){
-        
-        // res.status(500).json({status:"User was not Deleted",ErrorMsg:err})
-        console.log("Error Msg: ",err);
-        next(err);
-
-    }
-}
-module.exports ={getAllUserController,singleUserController,createUserController,updateUserController,deleteUserController}
+    !deletedEmp &&
+      res
+        .status(200)
+        .json({ status: "User cant be Deleted , as it does not exist!!!" });
+  } catch (err) {
+    // res.status(500).json({status:"User was not Deleted",ErrorMsg:err})
+    console.log("Error Msg: ", err);
+    next(err);
+  }
+};
+module.exports = {
+  getAllUserController,
+  singleUserController,
+  createUserController,
+  updateUserController,
+  deleteUserController,
+};

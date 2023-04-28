@@ -4,7 +4,7 @@ require("dotenv").config();
 let UserModel = require("../Model/UserModel");
 
 let register = async (req, res, next) => {
-   /*  
+  /*  
   #swagger.tags = ['Login/Register']
   #swagger.security = [{
     "apiKeyAuth": []
@@ -39,7 +39,7 @@ let register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-    /*  
+  /*  
   #swagger.tags = ['Login/Register']
   #swagger.security = [{
     "apiKeyAuth": []
@@ -62,12 +62,12 @@ const login = async (req, res, next) => {
 
     if (!user) return next(creatError(404, "User not Found!!"));
 
-    if (   req.body.password!==user.password)
+    if (req.body.password !== user.password)
       return next(creatError(404, "wrong Password or user name !!"));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    let { password,...otherDetails } = user._doc;
+    let { password, ...otherDetails } = user._doc;
     res.cookie("access_token", token, { httpOnly: true });
     res.status(200).send({
       msg: "User has been Logged in successfully",
