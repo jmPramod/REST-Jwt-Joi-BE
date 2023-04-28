@@ -4,6 +4,7 @@ const { routes } = require("./router/routeGET");
 
 var cookies = require("cookie-parser");
 const app = express();
+const cors=require("cors")
 
 require("dotenv").config();
 
@@ -18,8 +19,14 @@ const swaggerFile = require("./swagger-output.json");
 /* -------------------------------------------------------------------------- */
 /*                                 middlewear                                 */
 /* -------------------------------------------------------------------------- */
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+const corsOprion={
+  origin:"*", 
+  credential:true,
+  optionSuccessStatus:200
 
+}
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(cors(corsOprion))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookies());
