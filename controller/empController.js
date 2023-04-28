@@ -85,14 +85,14 @@ const createUserController = async (req, res, next) => {
     });
 
     const user = await EmpSchema.findOne({ name: req.body.name });
-if(user){
-  return next(creatError(404, " user name  already exist!!"));
-}
+// if(user){
+//   return next(creatError(404, " user name  already exist!!"));
+// }
 const emailexist = await EmpSchema.findOne({     email: req.body.email, });
 if(emailexist){
   return next(creatError(404, "email already exist !!"));
 }
-if(!user && !emailexist) {
+if(  !emailexist) {
     await newUser.save();
     res.status(200).send({
       msg: "User has been created  successfully",

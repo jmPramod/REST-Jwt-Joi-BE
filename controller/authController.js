@@ -24,38 +24,31 @@ let register = async (req, res, next) => {
   */
 
   try {
-
     const { error, value } = await schemaJoi.validate(req.body);
-    console.log("pramod_pavi",error);
+    console.log("pramod_pavi", error);
     error && next(error);
 
-
-    
     const newUser = new UserModel({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
     });
 
- 
     const user = await UserModel.findOne({ name: req.body.name });
-if(user){
-  return next(creatError(404, " user name  already exist!!"));
-}
-const emailexist = await UserModel.findOne({     email: req.body.email, });
-if(emailexist){
-  return next(creatError(404, "email already exist !!"));
-}
-if(!user && !emailexist) {
-    await newUser.save();
-    res.status(200).send({
-      msg: "User has been created  successfully",
-      user: newUser,
-    });
-    
-  }
-
-    
+    // if (user) {
+    //   return next(creatError(404, " user name  already exist!!"));
+    // }
+    const emailexist = await UserModel.findOne({ email: req.body.email });
+    if (emailexist) {
+      return next(creatError(404, "email already exist !!"));
+    }
+    if (!emailexist) {
+      await newUser.save();
+      res.status(200).send({
+        msg: "User has been created  successfully",
+        user: newUser,
+      });
+    }
   } catch (err) {
     next(err);
   }
