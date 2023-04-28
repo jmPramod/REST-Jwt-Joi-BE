@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const EmpSchema = require("../Model/EmpSchema");
 
 const { schemaJoi } = require("../Model/joiValidaition");
+const creatError = require("../utils/errorHandelling");
 
 let getAllUserController = async (req, res, next) => {
   /*  
@@ -74,13 +75,32 @@ const createUserController = async (req, res, next) => {
     const { error, value } = await schemaJoi.validate(req.body);
     console.log("res123", { error, value });
     error && next(error);
-    const newEmp = new EmpSchema({
+
+    
+    
+    const newUser = new EmpSchema({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
     });
-    await newEmp.save();
-    res.status(200).json({ status: "User Created Success!!!", data: newEmp });
+
+    const user = await EmpSchema.findOne({ name: req.body.name });
+if(user){
+  return next(creatError(404, " user name  already exist!!"));
+}
+const emailexist = await EmpSchema.findOne({     email: req.body.email, });
+if(emailexist){
+  return next(creatError(404, "email already exist !!"));
+}
+if(!user && !emailexist) {
+    await newUser.save();
+    res.status(200).send({
+      msg: "User has been created  successfully",
+      user: newUser,
+    });
+    
+  }
+   
   } catch (err) {
     // res.status(500).json({status:"User was not Created",ErrorMsg:err})
     console.log("Error Msg: ", err);
